@@ -24,6 +24,7 @@ export const getTagById = async (id: string) => {
           author: true,
           upvotes: true,
           downvotes: true,
+          answers: true,
         },
       },
     },

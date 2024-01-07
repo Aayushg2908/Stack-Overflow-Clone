@@ -41,6 +41,7 @@ export default async function Home() {
               author={question.author}
               upvotes={question.upvotes}
               views={question.views}
+              answers={question.answers}
               createdAt={question.createdAt}
             />
           ))

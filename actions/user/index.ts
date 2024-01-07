@@ -14,6 +14,7 @@ export const getUserById = async (id: string) => {
           author: true,
           upvotes: true,
           downvotes: true,
+          answers: true,
         },
       },
     },

@@ -52,6 +52,7 @@ export const getAllQuestions = async () => {
       upvotes: true,
       downvotes: true,
       author: true,
+      answers: true,
     },
   });
 

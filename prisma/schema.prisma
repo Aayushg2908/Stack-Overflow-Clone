@@ -25,8 +25,13 @@ model User {
 
   questions Question[] @relation("author")
 
+  answers Answer[]
+
   upvoted Question[] @relation("Upvotes")
   downvoted Question[] @relation("Downvotes")
+
+  upVotedAnswers Answer[] @relation("Upvotes")
+  downVotedAnswers Answer[] @relation("Downvotes")
 
   createdAt DateTime @default(now())
 }
@@ -54,10 +59,31 @@ model Question {
 
   tags Tags[]
 
+  answers Answer[]
+
   upvotes User[] @relation("Upvotes")
   downvotes User[] @relation("Downvotes")
 
   createdAt DateTime @default(now())
 
   @@index([authorId])
+}
+
+model Answer {
+  id String @id @default(uuid())
+  content String
+
+  authorId String
+  author User @relation(fields: [authorId], references: [id])
+
+  questionId String
+  question Question @relation(fields: [questionId], references: [id])
+
+  upvotes User[] @relation("Upvotes")
+  downvotes User[] @relation("Downvotes")
+  
+  createdAt DateTime @default(now())
+
+  @@index([authorId])
+  @@index([questionId])
 }

@@ -1,4 +1,4 @@
-import { Tags, User } from "@prisma/client";
+import { Answer, Tags, User } from "@prisma/client";
 import Link from "next/link";
 import { Badge } from "./ui/badge";
 import Image from "next/image";
@@ -12,6 +12,7 @@ interface Props {
   author: User;
   upvotes: User[];
   views: number;
+  answers: Answer[];
   createdAt: Date;
 }
 
@@ -22,6 +23,7 @@ export const QuestionCard = ({
   author,
   upvotes,
   views,
+  answers,
   createdAt,
 }: Props) => {
   return (
@@ -60,6 +62,13 @@ export const QuestionCard = ({
             alt="Upvotes"
             value={formatAndDivideNumber(upvotes.length)}
             title=" Votes"
+            textStyles="small-medium text-dark400_light800"
+          />
+          <Metric
+            imgUrl="/assets/icons/message.svg"
+            alt="message"
+            value={formatAndDivideNumber(answers.length)}
+            title=" Answers"
             textStyles="small-medium text-dark400_light800"
           />
           <Metric

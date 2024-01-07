@@ -41,33 +41,32 @@ export const toggleSaveQuestion = async ({
   hasSaved: boolean;
   path: string;
 }) => {
+  let updateData = {};
+
   if (hasSaved) {
-    await db.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        saved: {
-          disconnect: {
-            id: questionId,
-          },
+    updateData = {
+      saved: {
+        disconnect: {
+          id: questionId,
         },
       },
-    });
+    };
   } else {
-    await db.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        saved: {
-          connect: {
-            id: questionId,
-          },
+    updateData = {
+      saved: {
+        connect: {
+          id: questionId,
         },
       },
-    });
+    };
   }
+
+  await db.user.update({
+    where: {
+      id: userId,
+    },
+    data: updateData,
+  });
 
   revalidatePath(path);
 };

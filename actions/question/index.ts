@@ -97,48 +97,47 @@ export const upvoteQuestion = async ({
   hasdownVoted: boolean;
   path: string;
 }) => {
+  let updateData = {};
+
   if (hasupVoted) {
-    await db.question.update({
-      where: {
-        id: questionId,
+    updateData = {
+      upvotes: {
+        disconnect: {
+          id: userId,
+        },
       },
-      data: {
-        upvotes: {
+    };
+  } else {
+    if (hasdownVoted) {
+      updateData = {
+        downvotes: {
           disconnect: {
             id: userId,
           },
         },
-      },
-    });
-  } else {
-    if (hasdownVoted) {
-      await db.question.update({
-        where: {
-          id: questionId,
-        },
-        data: {
-          downvotes: {
-            disconnect: {
-              id: userId,
-            },
-          },
-        },
-      });
-    }
-
-    await db.question.update({
-      where: {
-        id: questionId,
-      },
-      data: {
         upvotes: {
           connect: {
             id: userId,
           },
         },
-      },
-    });
+      };
+    } else {
+      updateData = {
+        upvotes: {
+          connect: {
+            id: userId,
+          },
+        },
+      };
+    }
   }
+
+  await db.question.update({
+    where: {
+      id: questionId,
+    },
+    data: updateData,
+  });
 
   revalidatePath(path);
 };
@@ -156,48 +155,47 @@ export const downvoteQuestion = async ({
   hasdownVoted: boolean;
   path: string;
 }) => {
+  let updateData = {};
+
   if (hasdownVoted) {
-    await db.question.update({
-      where: {
-        id: questionId,
+    updateData = {
+      downvotes: {
+        disconnect: {
+          id: userId,
+        },
       },
-      data: {
-        downvotes: {
+    };
+  } else {
+    if (hasupVoted) {
+      updateData = {
+        upvotes: {
           disconnect: {
             id: userId,
           },
         },
-      },
-    });
-  } else {
-    if (hasupVoted) {
-      await db.question.update({
-        where: {
-          id: questionId,
-        },
-        data: {
-          upvotes: {
-            disconnect: {
-              id: userId,
-            },
-          },
-        },
-      });
-    }
-
-    await db.question.update({
-      where: {
-        id: questionId,
-      },
-      data: {
         downvotes: {
           connect: {
             id: userId,
           },
         },
-      },
-    });
+      };
+    } else {
+      updateData = {
+        downvotes: {
+          connect: {
+            id: userId,
+          },
+        },
+      };
+    }
   }
+
+  await db.question.update({
+    where: {
+      id: questionId,
+    },
+    data: updateData,
+  });
 
   revalidatePath(path);
 };

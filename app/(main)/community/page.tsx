@@ -13,7 +13,7 @@ const CommunityPage = async () => {
           <Link
             key={user.id}
             href={`/profile/${user.clerkId}`}
-            className="bg-[#0F1117] flex flex-col gap-y-2 items-center justify-center p-8 rounded-xl"
+            className="dark:bg-[#0F1117] shadow-md dark:shadow-none flex flex-col gap-y-2 items-center justify-center p-8 rounded-xl"
           >
             <Image
               src={user.picture}

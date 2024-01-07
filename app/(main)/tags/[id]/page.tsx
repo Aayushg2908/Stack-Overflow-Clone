@@ -19,7 +19,6 @@ const TagByIdPage = async ({ params }: { params: { id: string } }) => {
                 tags={question.tags}
                 author={question.author}
                 upvotes={question.upvotes}
-                views={question.views}
                 answers={question.answers}
                 createdAt={question.createdAt}
               />

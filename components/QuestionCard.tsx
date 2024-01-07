@@ -11,7 +11,6 @@ interface Props {
   tags: Tags[];
   author: User;
   upvotes: User[];
-  views: number;
   answers: Answer[];
   createdAt: Date;
 }
@@ -22,7 +21,6 @@ export const QuestionCard = ({
   tags,
   author,
   upvotes,
-  views,
   answers,
   createdAt,
 }: Props) => {
@@ -69,13 +67,6 @@ export const QuestionCard = ({
             alt="message"
             value={formatAndDivideNumber(answers.length)}
             title=" Answers"
-            textStyles="small-medium text-dark400_light800"
-          />
-          <Metric
-            imgUrl="/assets/icons/eye.svg"
-            alt="eye"
-            value={formatAndDivideNumber(views)}
-            title=" Views"
             textStyles="small-medium text-dark400_light800"
           />
         </div>

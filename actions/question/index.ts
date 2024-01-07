@@ -40,6 +40,7 @@ export const createQuestion = async (input: createQuestion) => {
   });
 
   revalidatePath(path);
+  revalidatePath("/");
 };
 
 export const getAllQuestions = async () => {
@@ -57,4 +58,146 @@ export const getAllQuestions = async () => {
   });
 
   return questions;
+};
+
+export const getQuestionById = async (id: string) => {
+  const question = await db.question.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      tags: true,
+      upvotes: true,
+      downvotes: true,
+      author: true,
+      savedBy: true,
+      answers: {
+        include: {
+          author: true,
+          upvotes: true,
+          downvotes: true,
+        },
+      },
+    },
+  });
+
+  return question;
+};
+
+export const upvoteQuestion = async ({
+  userId,
+  questionId,
+  hasupVoted,
+  hasdownVoted,
+  path,
+}: {
+  userId: string;
+  questionId: string;
+  hasupVoted: boolean;
+  hasdownVoted: boolean;
+  path: string;
+}) => {
+  if (hasupVoted) {
+    await db.question.update({
+      where: {
+        id: questionId,
+      },
+      data: {
+        upvotes: {
+          disconnect: {
+            id: userId,
+          },
+        },
+      },
+    });
+  } else {
+    if (hasdownVoted) {
+      await db.question.update({
+        where: {
+          id: questionId,
+        },
+        data: {
+          downvotes: {
+            disconnect: {
+              id: userId,
+            },
+          },
+        },
+      });
+    }
+
+    await db.question.update({
+      where: {
+        id: questionId,
+      },
+      data: {
+        upvotes: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
+    });
+  }
+
+  revalidatePath(path);
+};
+
+export const downvoteQuestion = async ({
+  userId,
+  questionId,
+  hasupVoted,
+  hasdownVoted,
+  path,
+}: {
+  userId: string;
+  questionId: string;
+  hasupVoted: boolean;
+  hasdownVoted: boolean;
+  path: string;
+}) => {
+  if (hasdownVoted) {
+    await db.question.update({
+      where: {
+        id: questionId,
+      },
+      data: {
+        downvotes: {
+          disconnect: {
+            id: userId,
+          },
+        },
+      },
+    });
+  } else {
+    if (hasupVoted) {
+      await db.question.update({
+        where: {
+          id: questionId,
+        },
+        data: {
+          upvotes: {
+            disconnect: {
+              id: userId,
+            },
+          },
+        },
+      });
+    }
+
+    await db.question.update({
+      where: {
+        id: questionId,
+      },
+      data: {
+        downvotes: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
+    });
+  }
+
+  revalidatePath(path);
 };

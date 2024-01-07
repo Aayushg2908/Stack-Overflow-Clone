@@ -15,8 +15,8 @@ export const MobileNav = () => {
       <SheetTrigger>
         <Image
           src="assets/icons/hamburger.svg"
-          width={40}
-          height={40}
+          width={36}
+          height={36}
           alt="Menu"
           className="sm:hidden invert dark:invert-0"
         />

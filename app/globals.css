@@ -54,7 +54,6 @@ body,
     --ring: 20.5 90.2% 48.2%;
   }
 }
-
  
 @layer base {
   * {
@@ -63,4 +62,58 @@ body,
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 50px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.markdown a {
+  color: #1da1f2;
+}
+
+.markdown a,
+code {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  word-break: break-all;
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+
+  padding: 2px;
+  color: #ff7000 !important;
+}
+
+.markdown pre {
+  display: grid;
+  width: 100%;
+}
+
+.markdown pre code {
+  width: 100%;
+  display: block;
+  overflow-x: auto;
+
+  color: inherit !important;
 }

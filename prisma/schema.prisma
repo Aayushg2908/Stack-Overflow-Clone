@@ -16,6 +16,48 @@ model User {
   username String @unique
   email String @unique
   picture String
+  bio String?
+  location String?
+  portfolioWebsite String?
+  reputation Int @default(0)
+
+  saved Question[]
+
+  questions Question[] @relation("author")
+
+  upvoted Question[] @relation("Upvotes")
+  downvoted Question[] @relation("Downvotes")
 
   createdAt DateTime @default(now())
+}
+
+model Tags {
+  id String @id @default(uuid())
+  name String @unique
+
+  questions Question[]
+
+
+  createdAt DateTime @default(now())
+}
+
+model Question {
+  id String @id @default(uuid())
+  title String
+  content String
+  views Int @default(0)
+
+  savedBy User[]
+
+  authorId String
+  author User @relation("author", fields: [authorId], references: [id])
+
+  tags Tags[]
+
+  upvotes User[] @relation("Upvotes")
+  downvotes User[] @relation("Downvotes")
+
+  createdAt DateTime @default(now())
+
+  @@index([authorId])
 }

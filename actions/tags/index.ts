@@ -11,3 +11,23 @@ export const getAllTags = async () => {
 
   return tags;
 };
+
+export const getTagById = async (id: string) => {
+  const tag = await db.tags.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      questions: {
+        include: {
+          tags: true,
+          author: true,
+          upvotes: true,
+          downvotes: true,
+        },
+      },
+    },
+  });
+
+  return tag;
+};

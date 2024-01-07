@@ -14,6 +14,7 @@ const TagsPage = async () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {tags.map((tag) => (
               <Link
+                key={tag.id}
                 className="dark:bg-[#0F1117] shadow-md dark:shadow-none flex flex-col items-center justify-center gap-y-4 p-6 rounded-xl"
                 href={`/tags/${tag.id}`}
               >

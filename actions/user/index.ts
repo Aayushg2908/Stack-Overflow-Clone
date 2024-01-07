@@ -7,7 +7,23 @@ export const getUserById = async (id: string) => {
     where: {
       clerkId: id,
     },
+    include: {
+      saved: {
+        include: {
+          tags: true,
+          author: true,
+          upvotes: true,
+          downvotes: true,
+        },
+      },
+    },
   });
 
   return user;
+};
+
+export const getAllUsers = async () => {
+  const users = await db.user.findMany();
+
+  return users;
 };

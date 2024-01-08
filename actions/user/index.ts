@@ -18,6 +18,16 @@ export const getUserById = async (id: string) => {
           answers: true,
         },
       },
+      questions: {
+        include: {
+          upvotes: true,
+          downvotes: true,
+          author: true,
+          tags: true,
+          answers: true,
+        },
+      },
+      answers: true,
     },
   });
 
@@ -66,6 +76,43 @@ export const toggleSaveQuestion = async ({
       id: userId,
     },
     data: updateData,
+  });
+
+  revalidatePath(path);
+};
+
+export const getUser = async (id: string) => {
+  const user = await db.user.findUnique({
+    where: {
+      clerkId: id,
+    },
+  });
+
+  return user;
+};
+
+export const updateUser = async ({
+  clerkId,
+  updateData,
+  path,
+}: {
+  clerkId: string;
+  updateData: {
+    name: string;
+    bio: string;
+    username: string;
+    portfolioWebsite: string;
+    location: string;
+  };
+  path: string;
+}) => {
+  await db.user.update({
+    where: {
+      clerkId,
+    },
+    data: {
+      ...updateData,
+    },
   });
 
   revalidatePath(path);

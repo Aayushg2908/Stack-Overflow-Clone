@@ -4,9 +4,11 @@ import { Badge } from "./ui/badge";
 import Image from "next/image";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
 import Metric from "./Metric";
+import EditDeleteAction from "./EditDeleteAction";
 
 interface Props {
   id: string;
+  clerkId?: string;
   title: string;
   tags: Tags[];
   author: User;
@@ -18,17 +20,23 @@ interface Props {
 export const QuestionCard = ({
   id,
   title,
+  clerkId,
   tags,
   author,
   upvotes,
   answers,
   createdAt,
 }: Props) => {
+  const showActionButtons = clerkId && clerkId === author.clerkId;
+
   return (
     <div className="dark:bg-[#0F1117] shadow-md dark:shadow-none flex flex-col gap-2 rounded-xl p-9 sm:px-11">
-      <Link href={`/question/${id}`}>
-        <div className="font-semibold text-xl line-clamp-1">{title}</div>
-      </Link>
+      <div className="flex justify-between items-center">
+        <Link href={`/question/${id}`}>
+          <div className="font-semibold text-xl line-clamp-1">{title}</div>
+        </Link>
+        {showActionButtons && <EditDeleteAction type="Question" itemId={id} />}
+      </div>
       <div className="mt-2 flex flex-wrap gap-2">
         {tags.map((tag) => (
           <Link key={tag.id} href={`/tags/${tag.id}`}>

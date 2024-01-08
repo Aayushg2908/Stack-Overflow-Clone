@@ -140,3 +140,34 @@ export const downvoteAnswer = async ({
 
   revalidatePath(path);
 };
+
+export const deleteAnswer = async ({
+  id,
+  path,
+}: {
+  id: string;
+  path: string;
+}) => {
+  await db.answer.update({
+    where: {
+      id,
+    },
+    data: {
+      author: {
+        update: {
+          reputation: {
+            decrement: 10,
+          },
+        },
+      },
+    },
+  });
+
+  await db.answer.delete({
+    where: {
+      id,
+    },
+  });
+
+  revalidatePath(path);
+};

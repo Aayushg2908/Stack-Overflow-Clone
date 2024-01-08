@@ -11,6 +11,13 @@ interface createQuestion {
   path: string;
 }
 
+interface updateQuestion {
+  questionId: string | undefined;
+  title: string;
+  content: string;
+  path: string;
+}
+
 export const createQuestion = async (input: createQuestion) => {
   const { title, content, tags, author, path } = input;
 
@@ -229,5 +236,26 @@ export const deleteQuestion = async ({
   });
 
   revalidatePath(path);
+  revalidatePath("/");
+};
+
+export const updateQuestion = async ({
+  questionId,
+  title,
+  content,
+  path,
+}: updateQuestion) => {
+  await db.question.update({
+    where: {
+      id: questionId,
+    },
+    data: {
+      title,
+      content,
+    },
+  });
+
+  revalidatePath(path);
+  revalidatePath(`/question/${questionId}`);
   revalidatePath("/");
 };

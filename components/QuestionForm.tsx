@@ -21,25 +21,33 @@ import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { createQuestion } from "@/actions/question";
+import { createQuestion, updateQuestion } from "@/actions/question";
+import { Question, Tags } from "@prisma/client";
 
 interface QuestionProps {
   type?: string;
   userId: string;
+  questionDetails?: Question & { tags: Tags[] };
 }
 
-export const QuestionForm = ({ type, userId }: QuestionProps) => {
+export const QuestionForm = ({
+  type,
+  userId,
+  questionDetails,
+}: QuestionProps) => {
   const editorRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
+  const groupedTags = questionDetails?.tags.map((tag: any) => tag.name);
+
   const form = useForm<z.infer<typeof QuestionsSchema>>({
     resolver: zodResolver(QuestionsSchema),
     defaultValues: {
-      title: "",
-      explanation: "",
-      tags: [],
+      title: questionDetails?.title || "",
+      explanation: questionDetails?.content || "",
+      tags: groupedTags || [],
     },
   });
 
@@ -47,6 +55,14 @@ export const QuestionForm = ({ type, userId }: QuestionProps) => {
     setIsSubmitting(true);
     try {
       if (type === "Edit") {
+        await updateQuestion({
+          questionId: questionDetails?.id,
+          title: values.title,
+          content: values.explanation,
+          path: pathname,
+        });
+        toast.success("Question updated successfully!");
+        router.push("/");
       } else {
         await createQuestion({
           title: values.title,
@@ -145,7 +161,7 @@ export const QuestionForm = ({ type, userId }: QuestionProps) => {
                   }}
                   onBlur={field.onBlur}
                   onEditorChange={(content) => field.onChange(content)}
-                  // initialValue={parsedQuestionDetails?.content || ""}
+                  initialValue={questionDetails?.content || ""}
                   init={{
                     height: 350,
                     menubar: false,

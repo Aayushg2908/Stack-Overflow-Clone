@@ -259,3 +259,16 @@ export const updateQuestion = async ({
   revalidatePath(`/question/${questionId}`);
   revalidatePath("/");
 };
+
+export const getTopQuestions = async () => {
+  const questions = await db.question.findMany({
+    orderBy: {
+      upvotes: {
+        _count: "desc",
+      },
+    },
+    take: 4,
+  });
+
+  return questions;
+};

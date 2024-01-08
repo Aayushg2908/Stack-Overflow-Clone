@@ -171,3 +171,16 @@ export const deleteAnswer = async ({
 
   revalidatePath(path);
 };
+
+export const getPopularTags = async () => {
+  const tags = await db.tags.findMany({
+    orderBy: {
+      questions: {
+        _count: "desc",
+      },
+    },
+    take: 2,
+  });
+
+  return tags;
+};

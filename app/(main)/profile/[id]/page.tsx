@@ -8,6 +8,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { QuestionCard } from "@/components/QuestionCard";
+import { AnswerCard } from "@/components/AnswerCard";
 
 const ProfilePage = async ({ params }: { params: { id: string } }) => {
   const { userId } = auth();
@@ -136,7 +137,17 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
             ))}
           </TabsContent>
           <TabsContent value="Answers" className="flex w-full flex-col gap-6">
-            {/* <AnswersTab userId={user.id} clerkId={userId} /> */}
+            {user.answers.map((answer) => (
+              <AnswerCard
+                key={answer.id}
+                id={answer.id}
+                clerkId={userId}
+                author={answer.author}
+                question={answer.question}
+                upvotes={answer.upvotes.length}
+                createdAt={answer.createdAt}
+              />
+            ))}
           </TabsContent>
         </Tabs>
       </div>

@@ -1,19 +1,24 @@
 import { getAllQuestions } from "@/actions/question";
 import NoResult from "@/components/NoResult";
 import { QuestionCard } from "@/components/QuestionCard";
+import { Search } from "@/components/Search";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-export default async function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: { title: string };
+}) {
   const { userId } = auth();
   if (!userId) {
     return redirect("/sign-in");
   }
 
-  const questions = await getAllQuestions();
+  const questions = await getAllQuestions(searchParams.title);
 
   return (
     <>
@@ -30,6 +35,7 @@ export default async function Home() {
           Ask a Question
         </Link>
       </div>
+      <Search query="title" />
       <div className="mt-10 flex w-full flex-col gap-6">
         {questions.length > 0 ? (
           questions.map((question) => (

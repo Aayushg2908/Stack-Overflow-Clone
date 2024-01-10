@@ -3,10 +3,17 @@
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
-export const getUserById = async (id: string) => {
+export const getUserById = async (id: string, title?: string) => {
   const user = await db.user.findUnique({
     where: {
       clerkId: id,
+      questions: {
+        some: {
+          title: {
+            contains: title,
+          },
+        },
+      },
     },
     include: {
       saved: {
@@ -33,7 +40,7 @@ export const getUserById = async (id: string) => {
           question: true,
           upvotes: true,
           downvotes: true,
-        }
+        },
       },
     },
   });
@@ -41,8 +48,14 @@ export const getUserById = async (id: string) => {
   return user;
 };
 
-export const getAllUsers = async () => {
-  const users = await db.user.findMany();
+export const getAllUsers = async (username: string) => {
+  const users = await db.user.findMany({
+    where: {
+      username: {
+        contains: username,
+      },
+    },
+  });
 
   return users;
 };

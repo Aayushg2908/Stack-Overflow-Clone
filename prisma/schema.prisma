@@ -1,25 +1,25 @@
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
-
 model User {
-  id String @id @default(uuid())
-  clerkId String @unique
-  name String
-  username String @unique
-  email String @unique
-  picture String
-  bio String?
-  location String?
+  id               String  @id @default(uuid())
+  clerkId          String  @unique
+  name             String
+  username         String  @unique
+  email            String  @unique
+  picture          String
+  bio              String?
+  location         String?
   portfolioWebsite String?
-  reputation Int @default(0)
+  reputation       Int     @default(0)
 
   saved Question[]
 
@@ -27,40 +27,39 @@ model User {
 
   answers Answer[]
 
-  upvoted Question[] @relation("Upvotes")
+  upvoted   Question[] @relation("Upvotes")
   downvoted Question[] @relation("Downvotes")
 
-  upVotedAnswers Answer[] @relation("Upvotes")
+  upVotedAnswers   Answer[] @relation("Upvotes")
   downVotedAnswers Answer[] @relation("Downvotes")
 
   createdAt DateTime @default(now())
 }
 
 model Tags {
-  id String @id @default(uuid())
+  id   String @id @default(uuid())
   name String @unique
 
   questions Question[]
-
 
   createdAt DateTime @default(now())
 }
 
 model Question {
-  id String @id @default(uuid())
-  title String
+  id      String @id @default(uuid())
+  title   String
   content String @db.VarChar(10000)
 
   savedBy User[]
 
   authorId String
-  author User @relation("author", fields: [authorId], references: [id])
+  author   User   @relation("author", fields: [authorId], references: [id])
 
   tags Tags[]
 
   answers Answer[]
 
-  upvotes User[] @relation("Upvotes")
+  upvotes   User[] @relation("Upvotes")
   downvotes User[] @relation("Downvotes")
 
   createdAt DateTime @default(now())
@@ -69,18 +68,18 @@ model Question {
 }
 
 model Answer {
-  id String @id @default(uuid())
+  id      String @id @default(uuid())
   content String @db.VarChar(10000)
 
   authorId String
-  author User @relation(fields: [authorId], references: [id])
+  author   User   @relation(fields: [authorId], references: [id])
 
   questionId String
-  question Question @relation(fields: [questionId], references: [id])
+  question   Question @relation(fields: [questionId], references: [id])
 
-  upvotes User[] @relation("Upvotes")
+  upvotes   User[] @relation("Upvotes")
   downvotes User[] @relation("Downvotes")
-  
+
   createdAt DateTime @default(now())
 
   @@index([authorId])

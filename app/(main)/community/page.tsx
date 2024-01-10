@@ -1,13 +1,19 @@
 import { getAllUsers } from "@/actions/user";
+import { Search } from "@/components/Search";
 import Image from "next/image";
 import Link from "next/link";
 
-const CommunityPage = async () => {
-  const users = await getAllUsers();
+const CommunityPage = async ({
+  searchParams,
+}: {
+  searchParams: { username: string };
+}) => {
+  const users = await getAllUsers(searchParams.username);
 
   return (
     <div className="flex flex-col gap-y-4">
       <h1 className="font-bold text-3xl">All Users</h1>
+      <Search query="username" />
       <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
         {users.map((user) => (
           <Link

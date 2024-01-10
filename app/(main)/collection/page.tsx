@@ -1,20 +1,26 @@
 import { getUserById } from "@/actions/user";
 import NoResult from "@/components/NoResult";
 import { QuestionCard } from "@/components/QuestionCard";
+import { Search } from "@/components/Search";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
-const CollectionPage = async () => {
+const CollectionPage = async ({
+  searchParams,
+}: {
+  searchParams: { title: string };
+}) => {
   const { userId } = auth();
   if (!userId) {
     return redirect("/sign-in");
   }
 
-  const user = await getUserById(userId);
+  const user = await getUserById(userId, searchParams.title);
 
   return (
     <div className="flex flex-col gap-4">
       <h1 className="font-bold text-3xl tracking-tight">Saved Questions</h1>
+      <Search query="title" />
       <div className="mt-6">
         {user?.saved && user.saved.length > 0 ? (
           <div className="mt-6 flex flex-col gap-y-4">

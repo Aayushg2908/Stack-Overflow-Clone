@@ -2,8 +2,13 @@
 
 import { db } from "@/lib/db";
 
-export const getAllTags = async () => {
+export const getAllTags = async (name: string) => {
   const tags = await db.tags.findMany({
+    where: {
+      name: {
+        contains: name,
+      },
+    },
     include: {
       questions: true,
     },

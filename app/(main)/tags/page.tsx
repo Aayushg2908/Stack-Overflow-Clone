@@ -1,14 +1,20 @@
 import { getAllTags } from "@/actions/tags";
 import NoResult from "@/components/NoResult";
+import { Search } from "@/components/Search";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 
-const TagsPage = async () => {
-  const tags = await getAllTags();
+const TagsPage = async ({
+  searchParams,
+}: {
+  searchParams: { name: string };
+}) => {
+  const tags = await getAllTags(searchParams.name);
 
   return (
     <div className="flex flex-col gap-4">
       <h1 className="font-bold text-3xl tracking-tight">All Tags</h1>
+      <Search query="name" />
       <div className="mt-6">
         {tags.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

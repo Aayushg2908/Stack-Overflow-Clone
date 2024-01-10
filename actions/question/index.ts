@@ -50,8 +50,13 @@ export const createQuestion = async (input: createQuestion) => {
   revalidatePath("/");
 };
 
-export const getAllQuestions = async () => {
+export const getAllQuestions = async (title: string) => {
   const questions = await db.question.findMany({
+    where: {
+      title: {
+        contains: title,
+      },
+    },
     orderBy: {
       createdAt: "desc",
     },

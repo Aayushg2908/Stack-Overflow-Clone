@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ModeToggle } from "./ModeToggle";
 import { UserButton } from "@clerk/nextjs";
 import { MobileNav } from "./MobileNav";
+import GlobalSearch from "./GlobalSearch";
 
 export const Navbar = () => {
   return (
@@ -13,6 +14,7 @@ export const Navbar = () => {
           Stack<span className="text-orange-500">Overflow</span>
         </p>
       </Link>
+      <GlobalSearch />
       <div className="flex items-center justify-between gap-5">
         <ModeToggle />
         <UserButton

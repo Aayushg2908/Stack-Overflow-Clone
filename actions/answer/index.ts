@@ -52,40 +52,54 @@ export const upvoteAnswer = async ({
   hasdownVoted: boolean;
   path: string;
 }) => {
-  let updateData = {};
-
-  if (hasdownVoted) {
-    updateData = {
-      downvotes: {
-        disconnect: {
-          id: userId,
+  if (hasupVoted) {
+    await db.answer.update({
+      where: {
+        id: answerId,
+      },
+      data: {
+        upvotes: {
+          disconnect: {
+            id: userId,
+          },
+        },
+        author: {
+          update: {
+            reputation: {
+              decrement: 10,
+            },
+          },
         },
       },
-    };
-  } else if (hasupVoted) {
-    updateData = {
-      upvotes: {
-        disconnect: {
-          id: userId,
-        },
-      },
-    };
+    });
   } else {
-    updateData = {
-      upvotes: {
-        connect: {
-          id: userId,
+    if (hasdownVoted) {
+      await db.answer.update({
+        where: {
+          id: answerId,
         },
-      },
-    };
+        data: {
+          upvotes: {
+            connect: {
+              id: userId,
+            },
+          },
+          downvotes: {
+            disconnect: {
+              id: userId,
+            },
+          },
+          author: {
+            update: {
+              reputation: {
+                increment: 20,
+              },
+            },
+          },
+        },
+      });
+    }
   }
-
-  await db.answer.update({
-    where: {
-      id: answerId,
-    },
-    data: updateData,
-  });
 
   revalidatePath(path);
 };
@@ -103,40 +117,54 @@ export const downvoteAnswer = async ({
   hasdownVoted: boolean;
   path: string;
 }) => {
-  let updateData = {};
-
-  if (hasupVoted) {
-    updateData = {
-      upvotes: {
-        disconnect: {
-          id: userId,
+  if (hasdownVoted) {
+    await db.answer.update({
+      where: {
+        id: answerId,
+      },
+      data: {
+        downvotes: {
+          disconnect: {
+            id: userId,
+          },
+        },
+        author: {
+          update: {
+            reputation: {
+              increment: 10,
+            },
+          },
         },
       },
-    };
-  } else if (hasdownVoted) {
-    updateData = {
-      downvotes: {
-        disconnect: {
-          id: userId,
-        },
-      },
-    };
+    });
   } else {
-    updateData = {
-      downvotes: {
-        connect: {
-          id: userId,
+    if (hasupVoted) {
+      await db.answer.update({
+        where: {
+          id: answerId,
         },
-      },
-    };
+        data: {
+          downvotes: {
+            connect: {
+              id: userId,
+            },
+          },
+          upvotes: {
+            disconnect: {
+              id: userId,
+            },
+          },
+          author: {
+            update: {
+              reputation: {
+                decrement: 20,
+              },
+            },
+          },
+        },
+      });
+    }
   }
-
-  await db.answer.update({
-    where: {
-      id: answerId,
-    },
-    data: updateData,
-  });
 
   revalidatePath(path);
 };

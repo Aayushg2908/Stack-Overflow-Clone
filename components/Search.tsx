@@ -4,11 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import { usePathname, useRouter } from "next/navigation";
 
-interface SearchProps {
-  query: string;
-}
-
-export const Search = ({ query }: SearchProps) => {
+export const Search = ({ query }: { query: string }) => {
   const [searchParams, setSearchParams] = useState<string>("");
   const pathname = usePathname();
   const router = useRouter();
@@ -26,7 +22,7 @@ export const Search = ({ query }: SearchProps) => {
     }, 300);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [searchParams, router]);
+  }, [searchParams, router, pathname, query]);
 
   return (
     <div className="my-5 flex">

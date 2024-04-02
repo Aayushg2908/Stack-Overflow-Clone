@@ -10,7 +10,7 @@ generator client {
 }
 
 model User {
-  id               String  @id @default(uuid()) @map("_id") @db.ObjectId
+  id               String  @id @default(auto()) @map("_id") @db.ObjectId
   clerkId          String  @unique
   name             String
   username         String  @unique
@@ -44,7 +44,7 @@ model User {
 }
 
 model Tags {
-  id   String @id @default(uuid()) @map("_id") @db.ObjectId
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
   name String @unique
 
   questionId String[]   @db.ObjectId
@@ -54,7 +54,7 @@ model Tags {
 }
 
 model Question {
-  id      String @id @default(uuid()) @map("_id") @db.ObjectId
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
   title   String
   content String
 
@@ -81,7 +81,7 @@ model Question {
 }
 
 model Answer {
-  id      String @id @default(uuid()) @map("_id") @db.ObjectId
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
   content String
 
   authorId String @db.ObjectId

@@ -1,5 +1,5 @@
 datasource db {
-  provider     = "mongodb"
+  provider     = "postgresql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
@@ -10,7 +10,7 @@ generator client {
 }
 
 model User {
-  id               String  @id @default(auto()) @map("_id") @db.ObjectId
+  id               String  @id @default(uuid())
   clerkId          String  @unique
   name             String
   username         String  @unique
@@ -21,59 +21,46 @@ model User {
   portfolioWebsite String?
   reputation       Int     @default(0)
 
-  savedId String[]   @db.ObjectId
-  saved   Question[] @relation("saveQuestions", fields: [savedId], references: [id])
+  saved Question[]
 
   questions Question[] @relation("author")
 
   answers Answer[]
 
-  upvotedQuestionId String[]   @db.ObjectId
-  upvoted           Question[] @relation("Upvotes", fields: [upvotedQuestionId], references: [id])
+  upvoted   Question[] @relation("Upvotes")
+  downvoted Question[] @relation("Downvotes")
 
-  downvotedQuestionId String[]   @db.ObjectId
-  downvoted           Question[] @relation("Downvotes", fields: [downvotedQuestionId], references: [id])
-
-  upvotedAnswerId String[] @db.ObjectId
-  upVotedAnswers  Answer[] @relation("Upvotes", fields: [upvotedAnswerId], references: [id])
-
-  downvotedAnswerId String[] @db.ObjectId
-  downVotedAnswers  Answer[] @relation("Downvotes", fields: [downvotedAnswerId], references: [id])
+  upVotedAnswers   Answer[] @relation("Upvotes")
+  downVotedAnswers Answer[] @relation("Downvotes")
 
   createdAt DateTime @default(now())
 }
 
 model Tags {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  id   String @id @default(uuid())
   name String @unique
 
-  questionId String[]   @db.ObjectId
-  questions  Question[] @relation("tags", fields: [questionId], references: [id])
+  questions Question[]
 
   createdAt DateTime @default(now())
 }
 
 model Question {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  id      String @id @default(uuid())
   title   String
-  content String
+  content String @db.VarChar(10000)
 
-  savedById String[] @db.ObjectId
-  savedBy   User[]   @relation("saveQuestions", fields: [savedById], references: [id])
+  savedBy User[]
 
-  authorId String @db.ObjectId
+  authorId String
   author   User   @relation("author", fields: [authorId], references: [id])
 
-  questionId String[] @db.ObjectId
-  tags       Tags[]   @relation("tags", fields: [questionId], references: [id])
+  tags Tags[]
 
   answers Answer[]
 
-  upvotedUserId String[] @db.ObjectId
-  upvotes       User[]   @relation("Upvotes", fields: [upvotedUserId], references: [id])
-
-  downvotedUserId String[] @db.ObjectId
-  downvotes       User[]   @relation("Downvotes", fields: [downvotedUserId], references: [id])
+  upvotes   User[] @relation("Upvotes")
+  downvotes User[] @relation("Downvotes")
 
   createdAt DateTime @default(now())
 
@@ -81,20 +68,17 @@ model Question {
 }
 
 model Answer {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  id      String @id @default(uuid())
   content String
 
-  authorId String @db.ObjectId
+  authorId String
   author   User   @relation(fields: [authorId], references: [id])
 
-  questionId String   @db.ObjectId
+  questionId String
   question   Question @relation(fields: [questionId], references: [id])
 
-  upvotedUserId String[] @db.ObjectId
-  upvotes       User[]   @relation("Upvotes", fields: [upvotedUserId], references: [id])
-
-  downvotedUserId String[] @db.ObjectId
-  downvotes       User[]   @relation("Downvotes", fields: [downvotedUserId], references: [id])
+  upvotes   User[] @relation("Upvotes")
+  downvotes User[] @relation("Downvotes")
 
   createdAt DateTime @default(now())
 

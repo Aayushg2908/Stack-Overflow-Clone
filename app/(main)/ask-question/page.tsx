@@ -1,7 +1,7 @@
 import { getUserById } from "@/actions/user";
 import { QuestionForm } from "@/components/QuestionForm";
 import { auth } from "@clerk/nextjs";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 
 const AskQuestionPage = async () => {
   const { userId } = auth();
@@ -11,7 +11,7 @@ const AskQuestionPage = async () => {
 
   const user = await getUserById(userId);
   if (!user) {
-    return notFound();
+    return null;
   }
 
   return (

@@ -7,13 +7,16 @@ export const getUserById = async (id: string, title?: string) => {
   const user = await db.user.findUnique({
     where: {
       clerkId: id,
-      questions: {
-        some: {
-          title: {
-            contains: title,
+      ...(title && {
+        questions: {
+          some: {
+            title: {
+              contains: title,
+              mode: "insensitive",
+            },
           },
         },
-      },
+      }),
     },
     include: {
       saved: {
@@ -53,6 +56,7 @@ export const getAllUsers = async (username: string) => {
     where: {
       username: {
         contains: username,
+        mode: "insensitive",
       },
     },
   });

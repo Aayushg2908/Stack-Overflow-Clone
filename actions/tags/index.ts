@@ -7,6 +7,7 @@ export const getAllTags = async (name: string) => {
     where: {
       name: {
         contains: name,
+        mode: "insensitive",
       },
     },
     include: {

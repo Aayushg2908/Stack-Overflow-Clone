@@ -14,6 +14,7 @@ export const getGlobalSearchResults = async (query: string) => {
     where: {
       title: {
         contains: query,
+        mode: "insensitive",
       },
     },
   });
@@ -21,6 +22,7 @@ export const getGlobalSearchResults = async (query: string) => {
     where: {
       content: {
         contains: query,
+        mode: "insensitive",
       },
     },
   });
@@ -28,6 +30,7 @@ export const getGlobalSearchResults = async (query: string) => {
     where: {
       name: {
         contains: query,
+        mode: "insensitive",
       },
     },
   });
@@ -35,6 +38,7 @@ export const getGlobalSearchResults = async (query: string) => {
     where: {
       username: {
         contains: query,
+        mode: "insensitive",
       },
     },
   });

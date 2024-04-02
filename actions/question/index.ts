@@ -55,6 +55,7 @@ export const getAllQuestions = async (title: string) => {
     where: {
       title: {
         contains: title,
+        mode: "insensitive",
       },
     },
     orderBy: {

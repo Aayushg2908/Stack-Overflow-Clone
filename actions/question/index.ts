@@ -156,6 +156,26 @@ export const upvoteQuestion = async ({
           },
         },
       });
+    } else {
+      await db.question.update({
+        where: {
+          id: questionId,
+        },
+        data: {
+          upvotes: {
+            connect: {
+              id: userId,
+            },
+          },
+          author: {
+            update: {
+              reputation: {
+                increment: 10,
+              },
+            },
+          },
+        },
+      });
     }
   }
 
@@ -216,6 +236,26 @@ export const downvoteQuestion = async ({
             update: {
               reputation: {
                 decrement: 20,
+              },
+            },
+          },
+        },
+      });
+    } else {
+      await db.question.update({
+        where: {
+          id: questionId,
+        },
+        data: {
+          downvotes: {
+            connect: {
+              id: userId,
+            },
+          },
+          author: {
+            update: {
+              reputation: {
+                decrement: 10,
               },
             },
           },

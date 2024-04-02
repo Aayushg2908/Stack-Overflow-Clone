@@ -98,6 +98,26 @@ export const upvoteAnswer = async ({
           },
         },
       });
+    } else {
+      await db.answer.update({
+        where: {
+          id: answerId,
+        },
+        data: {
+          upvotes: {
+            connect: {
+              id: userId,
+            },
+          },
+          author: {
+            update: {
+              reputation: {
+                increment: 10,
+              },
+            },
+          },
+        },
+      });
     }
   }
 
@@ -158,6 +178,26 @@ export const downvoteAnswer = async ({
             update: {
               reputation: {
                 decrement: 20,
+              },
+            },
+          },
+        },
+      });
+    } else {
+      await db.answer.update({
+        where: {
+          id: answerId,
+        },
+        data: {
+          downvotes: {
+            connect: {
+              id: userId,
+            },
+          },
+          author: {
+            update: {
+              reputation: {
+                decrement: 10,
               },
             },
           },

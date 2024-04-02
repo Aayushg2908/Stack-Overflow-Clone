@@ -25,11 +25,11 @@ model User {
 
   answers Answer[]
 
-  upvoted   Question[] @relation("Upvotes")
-  downvoted Question[] @relation("Downvotes")
+  upvoted   Question[] @relation("UpvotesQuestion")
+  downvoted Question[] @relation("DownvotesQuestion")
 
-  upVotedAnswers   Answer[] @relation("Upvotes")
-  downVotedAnswers Answer[] @relation("Downvotes")
+  upVotedAnswers   Answer[] @relation("UpvotesAnswer")
+  downVotedAnswers Answer[] @relation("DownvotesAnswer")
 
   createdAt DateTime @default(now())
 }
@@ -57,8 +57,8 @@ model Question {
 
   answers Answer[]
 
-  upvotes   User[] @relation("Upvotes")
-  downvotes User[] @relation("Downvotes")
+  upvotes   User[] @relation("UpvotesQuestion")
+  downvotes User[] @relation("DownvotesQuestion")
 
   createdAt DateTime @default(now())
 
@@ -75,8 +75,8 @@ model Answer {
   questionId String
   question   Question @relation(fields: [questionId], references: [id])
 
-  upvotes   User[] @relation("Upvotes")
-  downvotes User[] @relation("Downvotes")
+  upvotes   User[] @relation("UpvotesAnswer")
+  downvotes User[] @relation("DownvotesAnswer")
 
   createdAt DateTime @default(now())
 
